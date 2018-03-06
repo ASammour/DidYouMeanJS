@@ -1,0 +1,48 @@
+<html>
+
+
+    <head>
+
+        <style>
+            .en-ar-span, .ar-en-span{
+                margin-top: 10px;
+                display:none;
+                background: coral;
+                width: auto;
+            }
+
+            .center{
+                text-align: center;
+            }
+
+            .didyoumean{
+                color:blue;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div style="direction:rtl;">
+            
+                <h4 class = "center">هذا مثال على كود التحويل</h4>
+                <label class="form-label" for="ar-en">من العربية إلى الإنجليزية</label>
+                <input class="form-input" type="text" id="ar-en" placeholder="اكتب نصًا بالعربية">
+                <span class="ar-en-span"></span>
+
+                <br><br>
+                <label class="form-label" for="en-ar">من الإنجليزية إلى العربية</label>
+                <input class="form-input" type="text" id="en-ar" placeholder="اكتب نصًا بالإنجليزية">
+                <span class="en-ar-span"></span>
+        </div>
+
+
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <script src="Main.js"></script>
+
+    </body>
+</html>

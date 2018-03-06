@@ -1,135 +1,52 @@
-/*إضافة لإخفاء جملة هل تقصد عند حذف النص من مربع النص*/
-$(".oo-ui-textInputWidget [type='search']").keyup(function(e) {
-     if (e.keyCode == 8) {
-         $('#didyoumeanr').empty();
-     }
- });
 
- $("#searchInput").keyup(function(e) {
-     if (e.keyCode == 8) {
-         $('#didyoumean').empty();
-     }
- });
+$( document ).ready(function() {
+    $("#en-ar").keyup(function(e) {
+        if (e.keyCode == 8) {
+            $('.en-ar-span').empty().hide();
+        }
+        else{
+            var arabic = /[\u0600-\u06FF]/;
+            var text = $('#en-ar').val();
+            if (!(arabic.test(text))) {
+                var newText = replaceEnChars (text);
+                $('.en-ar-span').show().html ("هل تقصد: <a class = 'didyoumean'>"+newText+"</a>؟");
+            }
+        }
+    });
+
+    $("#ar-en").keyup(function(e) {
+        if (e.keyCode == 8) {
+            $('.ar-en-span').empty().hide();
+        }
+        else {
+            var english = /[a-zA-Z]/;
+            var text = $('#ar-en').val();
+            if (!(english.test(text))) {
+                var newText = replaceArChars (text);
+                $('.ar-en-span').show().html ("هل تقصد: <a class = 'didyoumean'>"+newText+"</a>؟");
+            }
+        }
+    });
+
+    
+    
+});
+
+$('.en-ar-span').on('click', function() {
+    $('#en-ar').val($(".en-ar-span").text().replace ("هل تقصد: ","").replace ("؟",""));
+    $('.en-ar-span').empty().hide();
+});
+
+$('.ar-en-span').on('click', function() {
+    $('#ar-en').val($(".ar-en-span").text().replace ("هل تقصد: ","").replace ("؟",""));
+    $('.ar-en-span').empty().hide();
+});
+
  
  
-/*إضافة زر إلى صندوق الأدوات ليُتيح تحويل الأحرف الإنجليزية إلى العربية*/
-(function(mw, $, undefined) {
-    var customizeBetaToolbar = function() {
-        $('#wpTextbox1').wikiEditor('addToToolbar', {
-            'section': 'main',
-            'group': 'insert',
-            'tools': {
-                'en-ar': {
-                    label: 'الإنجليزية إلى العربية',
-                    type: 'button',
-                    icon: '//upload.wikimedia.org/wikipedia/commons/d/d8/Toolbaricon_bold_E.png',
-                    action: {
-                        type: 'callback',
-						/*عند الضغط على الزر سيقوم باستبدال المحدد بالنص العربي*/
-                        execute: function(context) {
-                        	/*عملية الاستبدال*/
-                            $('#wpTextbox1').val(
-                                $('#wpTextbox1').val().replace(getInputSelection($("#wpTextbox1")),
-                                    replaceEnChars(getInputSelection($("#wpTextbox1")))));
-
-                        }
-                    }
-
-               /*زر خاص بالتحويل من العربية إلى الإنجليزية*/
-                },'ar-en': {
-                    label: 'العربية إلى الإنجليزية',
-                    type: 'button',
-                    icon: '//upload.wikimedia.org/wikipedia/commons/8/81/Toolbaricon_bold_A-1.png',
-                    action: {
-                        type: 'callback',
-						/*عند الضغط على الزر سيقوم باستبدال المحدد بالنص الإنجليزي*/
-                        execute: function(context) {
-                        	/*عملية الاستبدال*/
-                            $('#wpTextbox1').val(
-                                $('#wpTextbox1').val().replace(getInputSelection($("#wpTextbox1")),
-                                    replaceArChars(getInputSelection($("#wpTextbox1")))));
-
-                        }
-                    }
-                }
-            }
-        });
-    };
 
 
-    if ($.inArray(mw.config.get('wgAction'), ['edit', 'submit']) !== -1) {
-        mw.loader.using('user.options', function() {
-            if (mw.user.options.get('usebetatoolbar')) {
-                mw.loader.using('ext.wikiEditor.toolbar', function() {
-                    $(customizeBetaToolbar);
-                });
-            } else {
-                $(customizeOrigToolbar);
-            }
-        });
-    }
-})(mediaWiki, jQuery);
-
-/*نهاية الزر*/
-
-
-/*النمط الخاص باللغة العربية*/
-var arabic = /[\u0600-\u06FF]/;
-
-/*افحص الحروف المدخلة في صندوق البحث عندما يتم إدخال أي حرف ، أو إزالته من الصندوق*/
-$('#searchInput').keyup(updateCount);
-$('#searchInput').keydown(updateCount);
-
-$(".oo-ui-textInputWidget [type='search']").ready(results);
-$(".oo-ui-textInputWidget [type='search']").keydown(results);
-$(".oo-ui-textInputWidget [type='search']").keyup(results);
-
-
-$("#searchInput").after('<br><br><div style = "color:blue;position:absolute; left:-1%;top:-120%;" id= "didyoumean"></div>');
-$("#searchText").after('<div style = "color:blue;position:absolute; left:22%;top:15%;" id= "didyoumeanr"></div>');
-
-/*الاستبدال في صفحة نتائج البحث*/
-function results() {
-    var cs = $(".oo-ui-textInputWidget [type='search']").val().length;
-    var searchKey = $(".oo-ui-textInputWidget [type='search']").val();
-    if (!(arabic.test(searchKey)) & cs > 4) {
-        $("#didyoumeanr").html("هل تقصد: <u><a style = 'color:red;' id = 'suggestr'>" + replaceEnChars(searchKey) + "</a>        </u>");
-        $('#suggestr').on('click', function() {
-            var input = $(".oo-ui-textInputWidget [type='search']");
-            input.val(replaceEnChars(searchKey));
-            $("#didyoumeanr").empty();
-        });
-    }
-}
-
-/*جلب النص المحدد*/
-function getInputSelection(elem) {
-    if (typeof elem != "undefined") {
-        s = elem[0].selectionStart;
-        e = elem[0].selectionEnd;
-        return elem.val().substring(s, e);
-    } else {
-        return '';
-    }
-}
-
-/*الاستبدال في صندوق البحث العادي*/
-function updateCount() {
-    var cs = $(this).val().length;
-    var searchKey = $(this).val();
-    if (!(arabic.test(searchKey)) & cs > 4) {
-        $("#didyoumean").html("هل تقصد: <u><a style = 'color:red;' id = 'suggest'>" + replaceEnChars(searchKey) + "</a>        </u>");
-        $('#suggest').on('click', function() {
-            var input = $("#searchInput");
-            input.val(replaceEnChars(searchKey));
-            $("#didyoumean").empty();
-        });
-    }
-}
-
-
-
-/*هنا يتم الاستبدال*/
+//من الإنجليزية إلى العربية
 function replaceEnChars(text) {
     text = text.replace(/q/g, 'ض');
     text = text.replace(/Q/g, 'َ');
@@ -205,6 +122,8 @@ function replaceEnChars(text) {
     return text;
 }
 
+
+//من العربية إلى الإنجليزية
 
 function replaceArChars(string) {
     string = string.replace(/ذ/gi, "`");
