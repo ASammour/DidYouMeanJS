@@ -1,6 +1,8 @@
 # DidYouMeanJS
+<div dir="rtl">
 
-<b>بالعربية</b></br>
+## بالعربية
+
 فكرة هذا الكود مستوحاة من إضافة قمتُ بكتابتها لتعمل في ويكيبيديا العربية، ويُمكن مطالعة شرح كامل حول طريقة عمل الإضافة في هذه الصفحة. https://ar.wikipedia.org/wiki/ويكيبيديا:تبديل_الحروف_العربية_لمقابلها_الإنجليزي_والعكس
 
 هذا الكود البسيط مكتوب بلغة جافا سكريبت، ويقوم بتحويل الحروف العربية إلى الإنجليزية، أو العكس؛ وذلك في حال استخدام لوحة المفاتيح العربية-الإنجليزية، والتي يلزم فيها تحويل نظام الكتابة من حين لآخر (Shift+Alt).
@@ -15,14 +17,19 @@
 <code><script src="Main.js"></script></code>
 
 أدناه هو أبسط مثال لكيفية استخدام الكود.
+</div>
+
 ```javascript
 <label class="form-label" for="ar-en">من العربية إلى الإنجليزية</label>
 <input class="form-input" type="text" id="ar-en" placeholder="اكتب نصًا بالعربية">
 <span class="ar-en-span"></span>
 ```
+<p dir="rtl">
 سيقوم الكود في المثال السابق باستبدال الأحرف العربية إلى الإنجليزية عندما يتم الكتابة في صندوق النص.
+</p>
 
-<b>بالإنجليزية</b></br>
+## English 
+
 The idea of this code is inspired by a gadget I have written to work in Arabic Wikipedia, and you can see a full explanation of how the add-on works on this page. https://ar.wikipedia.org/wiki/ويكيبيديا:تبديل_الحروف_العربية_لمقابلها_الإنجليزي_والعكس
 
 This simple code converts Arabic characters into English, or vice versa; if you use the Arabic-English keyboard, you need to convert the script from time to time (Shift + Alt).
