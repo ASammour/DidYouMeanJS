@@ -1,50 +1,61 @@
+document.addEventListener("DOMContentLoaded", function () {
 
-$( document ).ready(function() {
-    $("#en-ar").keyup(function(e) {
-        if (e.keyCode == 8) {
-            $('.en-ar-span').empty().hide();
-        }
-        else{
-            var arabic = /[\u0600-\u06FF]/;
-            var text = $('#en-ar').val();
-            if (!(arabic.test(text))) {
-                var newText = replaceEnChars (text);
-                $('.en-ar-span').show().html ("هل تقصد: <a class = 'didyoumean'>"+newText+"</a>؟");
-            }
-        }
-    });
+    const enar = document.querySelector("#en-ar")
+    const enarSpan = document.querySelector(".en-ar-span")
 
-    $("#ar-en").keyup(function(e) {
+    const aren = document.querySelector("#ar-en")
+    const arenSpan = document.querySelector(".ar-en-span")
+
+    enar.addEventListener('keyup', function(e) {
+
         if (e.keyCode == 8) {
-            $('.ar-en-span').empty().hide();
+            clearSpanContent (enarSpan)
         }
+
         else {
-            var english = /[a-zA-Z]/;
-            var text = $('#ar-en').val();
-            if (!(english.test(text))) {
-                var newText = replaceArChars (text);
-                $('.ar-en-span').show().html ("هل تقصد: <a class = 'didyoumean'>"+newText+"</a>؟");
+            let arabic = /[\u0600-\u06FF]/;
+            let text = enar.value;
+
+            if (!(arabic.test(text)) && text.trim() !== '') {
+                let newText = replaceEnChars (text);
+                enarSpan.style.display = 'inline'
+                enarSpan.innerHTML = "هل تقصد: <a class = 'didyoumean'>"+newText+"</a>؟";
             }
         }
     });
 
-    
-    
+    aren.addEventListener('keyup', function(e) {
+
+        if (e.keyCode == 8) {
+            clearSpanContent (arenSpan)
+        } else {
+            let english = /[a-zA-Z]/;
+            let text = aren.value;
+
+            if (!(english.test(text)) && text.trim() !== '') {
+                let newText = replaceEnChars (text);
+                arenSpan.style.display = 'inline'
+                arenSpan.innerHTML = "هل تقصد: <a class = 'didyoumean'>"+newText+"</a>؟";
+            }
+        }
+    });
+
+    enarSpan.addEventListener('click', function () {
+        enar.value = enarSpan.firstElementChild.textContent
+        clearSpanContent (enarSpan)
+    });
+
+    arenSpan.addEventListener('click', function () {
+        aren.value = arenSpan.firstElementChild.textContent
+        clearSpanContent (arenSpan)
+    });
+
 });
 
-$('.en-ar-span').on('click', function() {
-    $('#en-ar').val($(".en-ar-span").text().replace ("هل تقصد: ","").replace ("؟",""));
-    $('.en-ar-span').empty().hide();
-});
-
-$('.ar-en-span').on('click', function() {
-    $('#ar-en').val($(".ar-en-span").text().replace ("هل تقصد: ","").replace ("؟",""));
-    $('.ar-en-span').empty().hide();
-});
-
- 
- 
-
+function clearSpanContent (el) {
+    el.innerHTML = '';
+    el.style.display = 'none';
+}
 
 //من الإنجليزية إلى العربية
 function replaceEnChars(text) {
@@ -72,7 +83,7 @@ function replaceEnChars(text) {
     text = text.replace(/{/g, "<");
     text = text.replace(/]/g, "د");
     text = text.replace(/\}/g, ">");
-    
+
     text = text.replace(/a/g, "ش");
     text = text.replace(/A/g, "ِ");
     text = text.replace(/s/g, "س");
@@ -95,10 +106,10 @@ function replaceEnChars(text) {
     text = text.replace(/:/g, ":");
     text = text.replace(/'/g, "ط");
     text = text.replace(/"/g, "\"");
-    
+
     text = text.replace(/`/g, "ذ");
     text = text.replace(/~/g, "ّ");
-    
+
     text = text.replace(/z/g, "ئ");
     text = text.replace(/Z/g, "~");
     text = text.replace(/x/g, "ء");
@@ -128,7 +139,7 @@ function replaceEnChars(text) {
 function replaceArChars(string) {
     string = string.replace(/ذ/gi, "`");
     string = string.replace(/ّ/gi, '~');
-    
+
     string = string.replace(/د/gi, ']');
     string = string.replace(/>/gi, '}');
     string = string.replace(/ج/gi, '[');
@@ -152,7 +163,7 @@ function replaceArChars(string) {
     string = string.replace(/ً/gi, 'W');
     string = string.replace(/ض/gi, 'q');
     string = string.replace(/َ/gi, 'Q');
-    
+
     string = string.replace(/ط/gi, '\'');
     string = string.replace(/\""/gi, '\"');
     string = string.replace(/ك/gi, ';');
@@ -174,7 +185,7 @@ function replaceArChars(string) {
     string = string.replace(/ٍ/gi, 'S');
     string = string.replace(/ش/gi, 'a');
     string = string.replace(/ِ/gi, 'A');
-    
+
     string = string.replace(/ظ/gi, '؟');
     string = string.replace(/؟/gi, '?');
     string = string.replace(/ز/gi, '.');
